@@ -8,7 +8,8 @@ ECDSA is a **digital signature** algorithm, not an encryption algorithm. This pr
 
 ## Project contents
 
-- `/home/runner/work/encryption-demo/encryption-demo/src/encryption_demo/demo.py` - main demo application
+- `/home/runner/work/encryption-demo/encryption-demo/src/encryption_demo/demo.py` - ECDSA demo implementation
+- `/home/runner/work/encryption-demo/encryption-demo/src/encryption_demo/__main__.py` - package entrypoint for module execution
 - `/home/runner/work/encryption-demo/encryption-demo/tests/test_demo.py` - basic test coverage
 - `/home/runner/work/encryption-demo/encryption-demo/.devcontainer/devcontainer.json` - dev container setup
 - `/home/runner/work/encryption-demo/encryption-demo/.github/workflows/run-demo.yml` - GitHub Actions workflow that runs the demo and stores the log file
@@ -18,13 +19,13 @@ ECDSA is a **digital signature** algorithm, not an encryption algorithm. This pr
 ```bash
 python -m pip install --upgrade pip
 python -m pip install -e .
-python -m encryption_demo.demo
+python -m encryption_demo
 ```
 
 Run with a custom message:
 
 ```bash
-python -m encryption_demo.demo --message "Learning ECDSA"
+python -m encryption_demo --message "Learning ECDSA"
 ```
 
 ## Run tests
