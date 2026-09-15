@@ -1,14 +1,14 @@
 # encryption-demo
 
-A small Python demo that teaches the basics of ECDSA by generating a key pair, signing a message, verifying the signature, and logging each step.
+A small Python demo that teaches the basics of ECDSA and ECDHE with verbose, step-by-step logs.
 
 ## Important note
 
-ECDSA is a **digital signature** algorithm, not an encryption algorithm. This project demonstrates signing and verification because that is the correct use of ECDSA.
+ECDSA is a **digital signature** algorithm, not an encryption algorithm. ECDHE is a **key exchange** mechanism. This project demonstrates both concepts in separate demos.
 
 ## Project contents
 
-- `/home/runner/work/encryption-demo/encryption-demo/src/encryption_demo/demo.py` - ECDSA demo implementation
+- `/home/runner/work/encryption-demo/encryption-demo/src/encryption_demo/demo.py` - ECDSA signing demo and ECDHE key exchange demo implementations
 - `/home/runner/work/encryption-demo/encryption-demo/src/encryption_demo/__main__.py` - package entrypoint for module execution
 - `/home/runner/work/encryption-demo/encryption-demo/tests/test_demo.py` - basic test coverage
 - `/home/runner/work/encryption-demo/encryption-demo/.devcontainer/devcontainer.json` - dev container setup
@@ -26,6 +26,12 @@ Run with a custom message:
 
 ```bash
 python -m encryption_demo --message "Learning ECDSA"
+```
+
+Run the ECDHE key exchange demo:
+
+```bash
+python -m encryption_demo --demo ecdhe
 ```
 
 ## Run tests
