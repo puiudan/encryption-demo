@@ -1,11 +1,12 @@
 import unittest
 
-from encryption_demo.demo import run_demo, run_ecdhe_demo
+from encryption_demo.ecdhe import run_ecdhe_demo
+from encryption_demo.ecdsa import run_ecdsa_demo
 
 
 class DemoTests(unittest.TestCase):
-    def test_demo_verifies_original_message_and_rejects_tampered_message(self) -> None:
-        result = run_demo("unit test message")
+    def test_ecdsa_demo_verifies_original_message_and_rejects_tampered_message(self) -> None:
+        result = run_ecdsa_demo("unit test message")
 
         self.assertTrue(result.verified)
         self.assertFalse(result.tampered_verified)

@@ -1,4 +1,4 @@
-name: Run ECDSA Demo
+name: Run Crypto Demos
 
 on:
   push:
@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 jobs:
-  run-demo:
+  run-ecdsa-demo:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -24,12 +24,37 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -e .
 
-      - name: Run demo and capture logs
+      - name: Run ECDSA demo and capture logs
         run: |
           python -m encryption_demo --message "Hello from GitHub Actions" 2>&1 | tee ecdsa-demo.log
 
-      - name: Upload demo logs
+      - name: Upload ECDSA demo logs
         uses: actions/upload-artifact@v4
         with:
           name: ecdsa-demo-log
           path: ecdsa-demo.log
+  run-ecdhe-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install project
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+
+      - name: Run ECDHE demo and capture logs
+        run: |
+          python -m encryption_demo --demo ecdhe 2>&1 | tee ecdhe-demo.log
+
+      - name: Upload ECDHE demo logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecdhe-demo-log
+          path: ecdhe-demo.log

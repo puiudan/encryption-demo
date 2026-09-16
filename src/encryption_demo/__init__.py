@@ -1,2 +1,1 @@
-"""ECDSA demo package."""
-
+"""ECDSA and ECDHE demo package."""
