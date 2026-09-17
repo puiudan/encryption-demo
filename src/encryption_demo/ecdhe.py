@@ -52,9 +52,9 @@ def run_ecdhe_demo() -> EcdheDemoResult:
         format=serialization.PublicFormat.SubjectPublicKeyInfo,
     ).decode("utf-8")
     LOGGER.info("Generated ephemeral P-256 key pairs for Alice and Bob.")
-    LOGGER.info("Generated Alice/Bob PEM material for demo result export.")
-    LOGGER.info("Alice public key PEM length (chars): %d", len(alice_public_key_pem.strip()))
-    LOGGER.info("Bob public key PEM length (chars): %d", len(bob_public_key_pem.strip()))
+    LOGGER.info("Generated Alice/Bob private key material for demo result export.")
+    LOGGER.info("Alice public key (PEM, escaped newlines): %s", alice_public_key_pem.strip().replace("\n", "\\n"))
+    LOGGER.info("Bob public key (PEM, escaped newlines): %s", bob_public_key_pem.strip().replace("\n", "\\n"))
 
     alice_shared_secret = alice_private_key.exchange(ec.ECDH(), bob_public_key)
     bob_shared_secret = bob_private_key.exchange(ec.ECDH(), alice_public_key)

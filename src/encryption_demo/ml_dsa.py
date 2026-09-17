@@ -40,7 +40,7 @@ def run_ml_dsa_demo(message: str) -> MlDsaDemoResult:
     private_key_base64 = base64.b64encode(private_key.private_bytes_raw()).decode("ascii")
     public_key_base64 = base64.b64encode(public_key.public_bytes_raw()).decode("ascii")
     LOGGER.info("Generated ML-DSA-65 key pair.")
-    LOGGER.info("Generated private/public key bytes for demo result export.")
+    LOGGER.info("Generated private key bytes for demo result export.")
     LOGGER.info("Public key (raw, base64): %s", public_key_base64)
 
     message_bytes = message.encode("utf-8")
