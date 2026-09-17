@@ -3,7 +3,7 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "encryption-demo"
+name = "cryptography-demos"
 version = "0.1.0"
 description = "A Python cryptography learning demo for ECDSA, ECDHE, and HMAC-SHA256."
 readme = "README.md"

@@ -1,4 +1,4 @@
-# encryption-demo
+# cryptography-demos
 
 A small Python demo that teaches the basics of SHA-256, AES-GCM, and RSA-PSS with verbose, step-by-step logs.
 
