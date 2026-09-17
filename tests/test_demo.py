@@ -32,7 +32,7 @@ class DemoTests(unittest.TestCase):
         self.assertFalse(result.tampered_verified)
         self.assertFalse(result.wrong_key_verified)
         self.assertEqual(result.message, "unit test message")
-        self.assertEqual(result.key_length_bytes, len("unit test secret".encode("utf-8")))
+        self.assertEqual(result.message_hex, "756e69742074657374206d657373616765")
         self.assertTrue(result.tag_hex)
         self.assertTrue(result.tag_base64)
 

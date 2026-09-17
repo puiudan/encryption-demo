@@ -13,7 +13,6 @@ LOGGER = logging.getLogger("encryption_demo")
 @dataclass(frozen=True)
 class HmacSha256DemoResult:
     message: str
-    key_length_bytes: int
     message_hex: str
     tag_hex: str
     tag_base64: str
@@ -37,11 +36,8 @@ def run_hmac_sha256_demo(message: str, secret_key: str) -> HmacSha256DemoResult:
 
     message_bytes = message.encode("utf-8")
     secret_key_bytes = secret_key.encode("utf-8")
-    key_length_bytes = len(secret_key_bytes)
     message_hex = binascii.hexlify(message_bytes).decode("ascii")
-    LOGGER.info("Using a shared secret key with %d byte(s).", key_length_bytes)
-    LOGGER.info("Message: %s", message)
-    LOGGER.info("Message bytes (hex): %s", message_hex)
+    LOGGER.info("Prepared UTF-8 encoded input for HMAC processing.")
 
     tag = generate_hmac_tag(message_bytes, secret_key_bytes)
     tag_hex = tag.hex()
@@ -63,7 +59,6 @@ def run_hmac_sha256_demo(message: str, secret_key: str) -> HmacSha256DemoResult:
 
     return HmacSha256DemoResult(
         message=message,
-        key_length_bytes=key_length_bytes,
         message_hex=message_hex,
         tag_hex=tag_hex,
         tag_base64=tag_base64,
