@@ -22,11 +22,14 @@ def run_sha256_demo(message: str) -> Sha256DemoResult:
 
     message_bytes = message.encode("utf-8")
     message_hex = message_bytes.hex()
+    LOGGER.info("Input message length (bytes): %d", len(message_bytes))
     digest_hex = hashlib.sha256(message_bytes).hexdigest()
     LOGGER.info("Message bytes (hex): %s", message_hex)
     LOGGER.info("SHA-256 digest (hex): %s", digest_hex)
 
-    tampered_bytes = f"{message} (tampered)".encode("utf-8")
+    tampered_message = f"{message} (tampered)"
+    tampered_bytes = tampered_message.encode("utf-8")
+    LOGGER.info("Created a tampered input variant for comparison.")
     tampered_digest_hex = hashlib.sha256(tampered_bytes).hexdigest()
     digests_match = digest_hex == tampered_digest_hex
     LOGGER.info("Tampered SHA-256 digest (hex): %s", tampered_digest_hex)

@@ -16,7 +16,7 @@ LOGGER = logging.getLogger("encryption_demo")
 class AesGcmDemoResult:
     plaintext: str
     aad: str
-    key_base64: str
+    key_size_bits: int
     nonce_base64: str
     ciphertext_base64: str
     decrypted_plaintext: str
@@ -27,20 +27,27 @@ class AesGcmDemoResult:
 
 def run_aes_gcm_demo(plaintext: str, aad: str) -> AesGcmDemoResult:
     LOGGER.info("Starting AES-GCM demo.")
+    LOGGER.info("Input plaintext length (bytes): %d", len(plaintext.encode("utf-8")))
+    LOGGER.info("Input AAD length (bytes): %d", len(aad.encode("utf-8")))
 
     key = AESGCM.generate_key(bit_length=256)
     nonce = os.urandom(12)
     aesgcm = AESGCM(key)
+    nonce_base64 = base64.b64encode(nonce).decode("ascii")
+    LOGGER.info("Generated AES key length (bits): %d", len(key) * 8)
+    LOGGER.info("Generated nonce (base64): %s", nonce_base64)
 
     plaintext_bytes = plaintext.encode("utf-8")
     aad_bytes = aad.encode("utf-8")
     ciphertext = aesgcm.encrypt(nonce, plaintext_bytes, aad_bytes)
+    ciphertext_base64 = base64.b64encode(ciphertext).decode("ascii")
     LOGGER.info("Generated random AES-256 key and nonce.")
-    LOGGER.info("Encrypted plaintext with AES-GCM.")
+    LOGGER.info("Encrypted plaintext with AES-GCM to ciphertext (base64): %s", ciphertext_base64)
 
     decrypted = aesgcm.decrypt(nonce, ciphertext, aad_bytes)
     decrypted_plaintext = decrypted.decode("utf-8")
     decrypted_matches = decrypted_plaintext == plaintext
+    LOGGER.info("Decrypted plaintext length (bytes): %d", len(decrypted))
     LOGGER.info("Decryption with correct inputs succeeded: %s", decrypted_matches)
 
     tampered_nonce = bytearray(nonce)
@@ -64,9 +71,9 @@ def run_aes_gcm_demo(plaintext: str, aad: str) -> AesGcmDemoResult:
     return AesGcmDemoResult(
         plaintext=plaintext,
         aad=aad,
-        key_base64=base64.b64encode(key).decode("ascii"),
-        nonce_base64=base64.b64encode(nonce).decode("ascii"),
-        ciphertext_base64=base64.b64encode(ciphertext).decode("ascii"),
+        key_size_bits=len(key) * 8,
+        nonce_base64=nonce_base64,
+        ciphertext_base64=ciphertext_base64,
         decrypted_plaintext=decrypted_plaintext,
         decrypted_matches=decrypted_matches,
         modified_nonce_verified=modified_nonce_verified,

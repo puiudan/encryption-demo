@@ -28,10 +28,9 @@ class DemoTests(unittest.TestCase):
         self.assertTrue(result.decrypted_matches)
         self.assertFalse(result.modified_nonce_verified)
         self.assertFalse(result.modified_aad_verified)
-        key_bytes = base64.b64decode(result.key_base64)
         nonce_bytes = base64.b64decode(result.nonce_base64)
         ciphertext_bytes = base64.b64decode(result.ciphertext_base64)
-        self.assertEqual(len(key_bytes), 32)
+        self.assertEqual(result.key_size_bits, 256)
         self.assertEqual(len(nonce_bytes), 12)
         self.assertGreaterEqual(len(ciphertext_bytes), 16)
 

@@ -45,18 +45,24 @@ def run_rsa_pss_demo(message: str) -> RsaPssDemoResult:
         encoding=serialization.Encoding.PEM,
         format=serialization.PublicFormat.SubjectPublicKeyInfo,
     ).decode("utf-8")
+    LOGGER.info("Generated RSA private key (not logged for safety) with size: %d bits", private_key.key_size)
+    LOGGER.info("Generated RSA public key (PEM):\n%s", public_key_pem.strip())
 
     message_bytes = message.encode("utf-8")
+    LOGGER.info("Input message length (bytes): %d", len(message_bytes))
     signature = private_key.sign(
         message_bytes,
         padding.PSS(mgf=padding.MGF1(hashes.SHA256()), salt_length=padding.PSS.MAX_LENGTH),
         hashes.SHA256(),
     )
     signature_base64 = base64.b64encode(signature).decode("ascii")
+    LOGGER.info("Generated RSA-PSS signature length (bytes): %d", len(signature))
+    LOGGER.info("Generated RSA-PSS signature preview (base64): %s...", signature_base64[:32])
     LOGGER.info("Generated RSA key pair and RSA-PSS signature.")
 
     verified = verify_signature(public_key, message_bytes, signature)
     tampered_message = f"{message} (tampered)".encode("utf-8")
+    LOGGER.info("Attempting verification with a tampered message variant.")
     tampered_verified = verify_signature(public_key, tampered_message, signature)
     LOGGER.info("Verification with original message: %s", verified)
     LOGGER.info("Verification with tampered message: %s", tampered_verified)
