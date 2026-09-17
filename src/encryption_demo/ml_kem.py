@@ -18,6 +18,7 @@ class MlKemDemoResult:
     encapsulated_shared_secret_hex: str
     decapsulated_shared_secret_hex: str
     tampered_decapsulated_shared_secret_hex: str
+    tampered_decapsulation_succeeded: bool
     shared_secret_matches: bool
     tampered_shared_secret_matches: bool
 
@@ -45,8 +46,18 @@ def run_ml_kem_demo() -> MlKemDemoResult:
 
     tampered_ciphertext = bytearray(ciphertext)
     tampered_ciphertext[0] ^= 0x01
-    tampered_decapsulated_shared_secret = private_key.decapsulate(bytes(tampered_ciphertext))
-    tampered_decapsulated_shared_secret_hex = tampered_decapsulated_shared_secret.hex()
+    try:
+        tampered_decapsulated_shared_secret = private_key.decapsulate(bytes(tampered_ciphertext))
+        tampered_decapsulation_succeeded = True
+        tampered_decapsulated_shared_secret_hex = tampered_decapsulated_shared_secret.hex()
+    except (ValueError, TypeError):
+        tampered_decapsulation_succeeded = False
+        tampered_decapsulated_shared_secret = b""
+        tampered_decapsulated_shared_secret_hex = ""
+    LOGGER.info(
+        "Tampered ciphertext decapsulation succeeded: %s",
+        tampered_decapsulation_succeeded,
+    )
     LOGGER.info(
         "Tampered ciphertext decapsulation shared secret (hex): %s",
         tampered_decapsulated_shared_secret_hex,
@@ -65,6 +76,7 @@ def run_ml_kem_demo() -> MlKemDemoResult:
         encapsulated_shared_secret_hex=encapsulated_shared_secret_hex,
         decapsulated_shared_secret_hex=decapsulated_shared_secret_hex,
         tampered_decapsulated_shared_secret_hex=tampered_decapsulated_shared_secret_hex,
+        tampered_decapsulation_succeeded=tampered_decapsulation_succeeded,
         shared_secret_matches=shared_secret_matches,
         tampered_shared_secret_matches=tampered_shared_secret_matches,
     )

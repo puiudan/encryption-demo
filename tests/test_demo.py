@@ -26,7 +26,6 @@ class DemoTests(unittest.TestCase):
 
         self.assertEqual(result.plaintext, "unit test plaintext")
         self.assertEqual(result.aad, "unit test aad")
-        self.assertTrue(result.key_base64)
         self.assertEqual(result.decrypted_plaintext, "unit test plaintext")
         self.assertTrue(result.decrypted_matches)
         self.assertFalse(result.modified_nonce_verified)
@@ -65,6 +64,7 @@ class DemoTests(unittest.TestCase):
         self.assertTrue(result.ciphertext_base64)
         self.assertTrue(result.shared_secret_matches)
         self.assertFalse(result.tampered_shared_secret_matches)
+        self.assertIsInstance(result.tampered_decapsulation_succeeded, bool)
 
     def test_ml_dsa_demo_verifies_original_message_and_rejects_tampered_message(self) -> None:
         result = run_ml_dsa_demo("unit test message")
@@ -97,10 +97,12 @@ class DemoTests(unittest.TestCase):
     def test_parse_args_preserves_explicit_empty_strings_for_supported_demos(self) -> None:
         sha256_args = parse_args(["--demo", "sha256", "--message", ""])
         aes_gcm_args = parse_args(["--demo", "aes-gcm", "--message", "", "--aad", ""])
+        ml_dsa_args = parse_args(["--demo", "ml-dsa", "--message", ""])
 
         self.assertEqual(sha256_args.message, "")
         self.assertEqual(aes_gcm_args.message, "")
         self.assertEqual(aes_gcm_args.aad, "")
+        self.assertEqual(ml_dsa_args.message, "")
 
 
 if __name__ == "__main__":

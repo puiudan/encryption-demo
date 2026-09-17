@@ -23,7 +23,7 @@ class MlDsaDemoResult:
     tampered_verified: bool
 
 
-def verify_signature(public_key: mldsa.MLDSA65PublicKey, signature: bytes, message: bytes) -> bool:
+def verify_ml_dsa_signature(public_key: mldsa.MLDSA65PublicKey, signature: bytes, message: bytes) -> bool:
     try:
         public_key.verify(signature, message)
     except (InvalidSignature, ValueError, TypeError):
@@ -50,11 +50,11 @@ def run_ml_dsa_demo(message: str) -> MlDsaDemoResult:
     LOGGER.info("Message bytes (hex): %s", message_hex)
     LOGGER.info("Signature (base64): %s", signature_base64)
 
-    verified = verify_signature(public_key, signature, message_bytes)
+    verified = verify_ml_dsa_signature(public_key, signature, message_bytes)
     LOGGER.info("Verification with the original message: %s", verified)
 
     tampered_message = f"{message} (tampered)".encode("utf-8")
-    tampered_verified = verify_signature(public_key, signature, tampered_message)
+    tampered_verified = verify_ml_dsa_signature(public_key, signature, tampered_message)
     LOGGER.info("Verification after tampering with the message: %s", tampered_verified)
     LOGGER.info("ML-DSA demo finished.")
 
