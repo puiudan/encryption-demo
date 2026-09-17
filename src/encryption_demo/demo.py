@@ -1,5 +1,6 @@
 import argparse
 import logging
+
 from .ecdhe import EcdheDemoResult, run_ecdhe_demo
 from .ecdsa import EcdsaDemoResult, run_ecdsa_demo
 from .hmac_sha256 import HmacSha256DemoResult, run_hmac_sha256_demo
@@ -19,7 +20,7 @@ def run_demo(message: str) -> EcdsaDemoResult:
     return run_ecdsa_demo(message)
 
 
-def parse_args() -> argparse.Namespace:
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Run a verbose ECDSA, ECDHE, or HMAC-SHA256 cryptography demo.",
     )
@@ -29,17 +30,26 @@ def parse_args() -> argparse.Namespace:
         default="ecdsa",
         help="Demo type to run.",
     )
-    parser.add_argument(
-        "--message",
-        default="Hello from the ECDSA demo!",
-        help="Message to use during the ECDSA or HMAC-SHA256 demo.",
-    )
-    parser.add_argument(
-        "--key",
-        default="demo secret key",
-        help="Secret key to use during the HMAC-SHA256 demo.",
-    )
-    return parser.parse_args()
+    known_args, _ = parser.parse_known_args(argv)
+
+    if known_args.demo in {"ecdsa", "hmac"}:
+        parser.add_argument(
+            "--message",
+            default=(
+                "Hello from the ECDSA demo!"
+                if known_args.demo == "ecdsa"
+                else "Hello from the HMAC-SHA256 demo!"
+            ),
+            help="Message to use during the selected demo.",
+        )
+    if known_args.demo == "hmac":
+        parser.add_argument(
+            "--key",
+            default="demo secret key",
+            help="Secret key to use during the HMAC-SHA256 demo.",
+        )
+
+    return parser.parse_args(argv)
 
 
 def main() -> int:

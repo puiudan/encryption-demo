@@ -1,5 +1,6 @@
 import unittest
 
+from encryption_demo.demo import parse_args
 from encryption_demo.ecdhe import run_ecdhe_demo
 from encryption_demo.ecdsa import run_ecdsa_demo
 from encryption_demo.hmac_sha256 import run_hmac_sha256_demo
@@ -35,6 +36,10 @@ class DemoTests(unittest.TestCase):
         self.assertEqual(result.message_hex, "756e69742074657374206d657373616765")
         self.assertTrue(result.tag_hex)
         self.assertTrue(result.tag_base64)
+
+    def test_parse_args_rejects_key_for_non_hmac_demo(self) -> None:
+        with self.assertRaises(SystemExit):
+            parse_args(["--demo", "ecdsa", "--key", "unit test secret"])
 
 
 if __name__ == "__main__":
