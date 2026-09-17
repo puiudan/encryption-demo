@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import binascii
 import hashlib
 import hmac
@@ -41,7 +42,7 @@ def run_hmac_sha256_demo(message: str, secret_key: str) -> HmacSha256DemoResult:
 
     tag = generate_hmac_tag(message_bytes, secret_key_bytes)
     tag_hex = tag.hex()
-    tag_base64 = binascii.b2a_base64(tag, newline=False).decode("ascii")
+    tag_base64 = base64.b64encode(tag).decode("ascii")
     LOGGER.info("Computed HMAC-SHA256 tag (hex): %s", tag_hex)
     LOGGER.info("Computed HMAC-SHA256 tag (base64): %s", tag_base64)
 
