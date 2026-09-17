@@ -1,6 +1,6 @@
 # cryptography-demos
 
-A small Python demo that teaches the basics of SHA-256, AES-GCM, and RSA-PSS with verbose, step-by-step logs.
+A small Python demo that teaches the basics of SHA-256, AES-GCM, RSA-PSS, ECDSA, ECDHE, and HMAC-SHA256 with verbose, step-by-step logs.
 
 ## Important note
 
@@ -11,6 +11,9 @@ SHA-256 is a **hash** function. AES-GCM is an **authenticated encryption** mode.
 - `src/encryption_demo/sha256.py` - SHA-256 hashing demo implementation
 - `src/encryption_demo/aes_gcm.py` - AES-GCM authenticated encryption demo implementation
 - `src/encryption_demo/rsa_pss.py` - RSA-PSS signing demo implementation
+- `src/encryption_demo/ecdsa.py` - ECDSA signing demo implementation
+- `src/encryption_demo/ecdhe.py` - ECDHE key-exchange demo implementation
+- `src/encryption_demo/hmac_sha256.py` - HMAC-SHA256 message authentication demo implementation
 - `src/encryption_demo/demo.py` - CLI entrypoint that selects which demo to run
 - `src/encryption_demo/__main__.py` - package entrypoint for module execution
 - `tests/test_demo.py` - basic test coverage
@@ -59,11 +62,11 @@ pip install -e .
 
 ## GitHub Actions logs
 
-The workflow at `.github/workflows/run-demo.yml` runs all three demos on every push and on manual dispatch.
+The workflow at `.github/workflows/run-demo.yml` runs all available demos on every push, pull request, and manual dispatch.
 
 To inspect logs for learning:
 
 1. Open the **Actions** tab in GitHub.
 2. Select the **Run Crypto Demos** workflow run.
-3. Open the **Run SHA-256 demo and capture logs**, **Run AES-GCM demo and capture logs**, or **Run RSA-PSS demo and capture logs** step to read the live console output.
-4. Download the **sha256-demo-log**, **aes-gcm-demo-log**, or **rsa-pss-demo-log** artifact if you want the full saved log file.
+3. Open the demo step you want to inspect (SHA-256, AES-GCM, RSA-PSS, ECDSA, ECDHE, or HMAC-SHA256) to read the live console output.
+4. Download the corresponding artifact: **sha256-demo-log**, **aes-gcm-demo-log**, **rsa-pss-demo-log**, **ecdsa-demo-log**, **ecdhe-demo-log**, or **hmac-sha256-demo-log**.

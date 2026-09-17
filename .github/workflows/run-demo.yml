@@ -2,6 +2,7 @@ name: Run Crypto Demos
 
 on:
   push:
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -85,3 +86,102 @@ jobs:
         with:
           name: rsa-pss-demo-log
           path: rsa-pss-demo.log
+
+  run-ecdsa-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install project
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+
+      - name: Run ECDSA demo and capture logs
+        run: |
+          python - <<'PY' 2>&1 | tee ecdsa-demo.log
+          import logging
+          from encryption_demo.ecdsa import run_ecdsa_demo
+
+          logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
+          result = run_ecdsa_demo("Hello from GitHub Actions")
+          raise SystemExit(0 if result.verified and not result.tampered_verified else 1)
+          PY
+
+      - name: Upload ECDSA demo logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecdsa-demo-log
+          path: ecdsa-demo.log
+
+  run-ecdhe-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install project
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+
+      - name: Run ECDHE demo and capture logs
+        run: |
+          python - <<'PY' 2>&1 | tee ecdhe-demo.log
+          import logging
+          from encryption_demo.ecdhe import run_ecdhe_demo
+
+          logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
+          result = run_ecdhe_demo()
+          raise SystemExit(0 if result.shared_secret_matches and result.derived_key_matches else 1)
+          PY
+
+      - name: Upload ECDHE demo logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecdhe-demo-log
+          path: ecdhe-demo.log
+
+  run-hmac-sha256-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install project
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+
+      - name: Run HMAC-SHA256 demo and capture logs
+        run: |
+          python - <<'PY' 2>&1 | tee hmac-sha256-demo.log
+          import logging
+          from encryption_demo.hmac_sha256 import run_hmac_sha256_demo
+
+          logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
+          result = run_hmac_sha256_demo("Hello from GitHub Actions", "github-actions-secret-key")
+          raise SystemExit(0 if result.verified and not result.tampered_verified and not result.wrong_key_verified else 1)
+          PY
+
+      - name: Upload HMAC-SHA256 demo logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: hmac-sha256-demo-log
+          path: hmac-sha256-demo.log
