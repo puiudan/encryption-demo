@@ -19,6 +19,10 @@ def get_actor_logger(actor: str) -> ActorLoggerAdapter:
     return ActorLoggerAdapter(logging.getLogger("encryption_demo"), {"actor": actor})
 
 
+class ActorStreamHandler(logging.StreamHandler):
+    """Marker stream handler for encryption_demo actor-formatted logs."""
+
+
 def configure_actor_logging(level: int = logging.INFO) -> None:
     logger = logging.getLogger("encryption_demo")
     formatter = logging.Formatter(
@@ -27,12 +31,11 @@ def configure_actor_logging(level: int = logging.INFO) -> None:
     )
 
     actor_handler = next(
-        (handler for handler in logger.handlers if getattr(handler, "_encryption_demo_actor_handler", False)),
+        (handler for handler in logger.handlers if isinstance(handler, ActorStreamHandler)),
         None,
     )
     if actor_handler is None:
-        actor_handler = logging.StreamHandler()
-        actor_handler._encryption_demo_actor_handler = True  # type: ignore[attr-defined]
+        actor_handler = ActorStreamHandler()
         logger.addHandler(actor_handler)
 
     actor_handler.setFormatter(formatter)
