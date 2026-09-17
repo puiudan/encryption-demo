@@ -38,4 +38,3 @@ def configure_actor_logging(level: int = logging.INFO) -> None:
     actor_handler.setFormatter(formatter)
     actor_handler.setLevel(level)
     logger.setLevel(level)
-    logger.propagate = False

@@ -8,10 +8,6 @@ from .rsa_pss import run_rsa_pss_demo
 from .sha256 import run_sha256_demo
 
 
-def configure_logging() -> None:
-    configure_actor_logging()
-
-
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Run a verbose cryptography demo.",
@@ -68,7 +64,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def main() -> int:
-    configure_logging()
+    configure_actor_logging()
     args = parse_args()
     if args.demo == "aes-gcm":
         result = run_aes_gcm_demo(args.message, args.aad)
