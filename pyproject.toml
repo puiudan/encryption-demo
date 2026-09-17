@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "encryption-demo"
 version = "0.1.0"
-description = "A Python ECDSA learning demo with verbose logs."
+description = "A Python cryptography learning demo for ECDSA, ECDHE, and HMAC-SHA256."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -17,4 +17,3 @@ package-dir = {"" = "src"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
-
