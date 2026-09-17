@@ -57,9 +57,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
             args.aad = "encryption-demo-aad"
         return args
 
-    if args.message is None:
-        args.message = "Hello from the RSA-PSS demo!"
-    return args
+    if args.demo == "rsa-pss":
+        if args.message is None:
+            args.message = "Hello from the RSA-PSS demo!"
+        return args
+
+    parser.error("Unsupported demo type.")
 
 
 def main() -> int:
@@ -67,7 +70,7 @@ def main() -> int:
     args = parse_args()
     if args.demo == "aes-gcm":
         result = run_aes_gcm_demo(args.message, args.aad)
-        return 0 if result.decrypted_matches and not result.tampered_verified else 1
+        return 0 if result.decrypted_matches and not result.modified_input_verified else 1
     if args.demo == "rsa-pss":
         result = run_rsa_pss_demo(args.message)
         return 0 if result.verified and not result.tampered_verified else 1

@@ -1,3 +1,4 @@
+import base64
 import unittest
 
 from encryption_demo.aes_gcm import run_aes_gcm_demo
@@ -23,10 +24,13 @@ class DemoTests(unittest.TestCase):
         self.assertEqual(result.aad, "unit test aad")
         self.assertEqual(result.decrypted_plaintext, "unit test plaintext")
         self.assertTrue(result.decrypted_matches)
-        self.assertFalse(result.tampered_verified)
-        self.assertTrue(result.key_base64)
-        self.assertTrue(result.nonce_base64)
-        self.assertTrue(result.ciphertext_base64)
+        self.assertFalse(result.modified_input_verified)
+        key_bytes = base64.b64decode(result.key_base64)
+        nonce_bytes = base64.b64decode(result.nonce_base64)
+        ciphertext_bytes = base64.b64decode(result.ciphertext_base64)
+        self.assertEqual(len(key_bytes), 32)
+        self.assertEqual(len(nonce_bytes), 12)
+        self.assertGreaterEqual(len(ciphertext_bytes), 16)
 
     def test_aes_gcm_demo_with_empty_inputs_still_rejects_tampering(self) -> None:
         result = run_aes_gcm_demo("", "")
@@ -35,7 +39,7 @@ class DemoTests(unittest.TestCase):
         self.assertEqual(result.aad, "")
         self.assertEqual(result.decrypted_plaintext, "")
         self.assertTrue(result.decrypted_matches)
-        self.assertFalse(result.tampered_verified)
+        self.assertFalse(result.modified_input_verified)
 
     def test_rsa_pss_demo_verifies_original_message_and_rejects_tampered_message(self) -> None:
         result = run_rsa_pss_demo("unit test message")

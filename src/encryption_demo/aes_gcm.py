@@ -21,7 +21,7 @@ class AesGcmDemoResult:
     ciphertext_base64: str
     decrypted_plaintext: str
     decrypted_matches: bool
-    tampered_verified: bool
+    modified_input_verified: bool
 
 
 def run_aes_gcm_demo(plaintext: str, aad: str) -> AesGcmDemoResult:
@@ -46,10 +46,10 @@ def run_aes_gcm_demo(plaintext: str, aad: str) -> AesGcmDemoResult:
     tampered_nonce[-1] ^= 0x01
     try:
         aesgcm.decrypt(bytes(tampered_nonce), ciphertext, aad_bytes)
-        tampered_verified = True
+        modified_input_verified = True
     except InvalidTag:
-        tampered_verified = False
-    LOGGER.info("Tampered ciphertext accepted: %s", tampered_verified)
+        modified_input_verified = False
+    LOGGER.info("Verification with modified nonce accepted: %s", modified_input_verified)
     LOGGER.info("AES-GCM demo finished.")
 
     return AesGcmDemoResult(
@@ -60,5 +60,5 @@ def run_aes_gcm_demo(plaintext: str, aad: str) -> AesGcmDemoResult:
         ciphertext_base64=base64.b64encode(ciphertext).decode("ascii"),
         decrypted_plaintext=decrypted_plaintext,
         decrypted_matches=decrypted_matches,
-        tampered_verified=tampered_verified,
+        modified_input_verified=modified_input_verified,
     )
