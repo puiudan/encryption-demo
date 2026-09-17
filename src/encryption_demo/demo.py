@@ -57,10 +57,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
             args.message = "Hello from the ECDSA demo!"
         return args
 
-    if args.message is None:
-        args.message = "Hello from the HMAC-SHA256 demo!"
     if args.key is None:
         parser.error("--key is required with --demo hmac")
+    if args.message is None:
+        args.message = "Hello from the HMAC-SHA256 demo!"
     return args
 
 
