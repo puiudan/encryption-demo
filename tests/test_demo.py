@@ -1,9 +1,11 @@
 import base64
 import unittest
 
+from cryptography.hazmat.primitives.asymmetric import rsa
+
 from encryption_demo.aes_gcm import run_aes_gcm_demo
 from encryption_demo.demo import parse_args
-from encryption_demo.rsa_pss import run_rsa_pss_demo
+from encryption_demo.rsa_pss import run_rsa_pss_demo, verify_signature
 from encryption_demo.sha256 import run_sha256_demo
 
 
@@ -49,6 +51,12 @@ class DemoTests(unittest.TestCase):
         self.assertEqual(result.message, "unit test message")
         self.assertIn("BEGIN PUBLIC KEY", result.public_key_pem)
         self.assertTrue(result.signature_base64)
+
+    def test_rsa_pss_verify_signature_rejects_malformed_signature(self) -> None:
+        private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
+        public_key = private_key.public_key()
+
+        self.assertFalse(verify_signature(public_key, b"unit test message", b"malformed"))
 
     def test_parse_args_rejects_invalid_demo_specific_arguments(self) -> None:
         invalid_argv_sets = [

@@ -29,7 +29,7 @@ def verify_signature(public_key: rsa.RSAPublicKey, message: bytes, signature: by
             padding.PSS(mgf=padding.MGF1(hashes.SHA256()), salt_length=padding.PSS.MAX_LENGTH),
             hashes.SHA256(),
         )
-    except InvalidSignature:
+    except (InvalidSignature, ValueError, TypeError):
         return False
     return True
 
