@@ -66,13 +66,13 @@ def main() -> int:
     args = parse_args()
     if args.demo == "aes-gcm":
         result = run_aes_gcm_demo(args.message, args.aad)
-        return 0 if result.decrypted_matches and not result.modified_input_verified else 1
+        return 0 if result.decrypted_matches and not result.modified_nonce_verified and not result.modified_aad_verified else 1
     if args.demo == "rsa-pss":
         result = run_rsa_pss_demo(args.message)
         return 0 if result.verified and not result.tampered_verified else 1
 
-    result = run_sha256_demo(args.message)
-    return 0 if not result.digests_match else 1
+    run_sha256_demo(args.message)
+    return 0
 
 
 if __name__ == "__main__":

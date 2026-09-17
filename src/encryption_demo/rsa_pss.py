@@ -23,6 +23,7 @@ class RsaPssDemoResult:
 
 
 def verify_signature(public_key: RSAPublicKey, message: bytes, signature: bytes) -> bool:
+    """Return False for invalid or malformed RSA-PSS signatures instead of raising."""
     try:
         public_key.verify(
             signature,

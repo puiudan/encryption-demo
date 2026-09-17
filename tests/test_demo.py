@@ -26,7 +26,8 @@ class DemoTests(unittest.TestCase):
         self.assertEqual(result.aad, "unit test aad")
         self.assertEqual(result.decrypted_plaintext, "unit test plaintext")
         self.assertTrue(result.decrypted_matches)
-        self.assertFalse(result.modified_input_verified)
+        self.assertFalse(result.modified_nonce_verified)
+        self.assertFalse(result.modified_aad_verified)
         key_bytes = base64.b64decode(result.key_base64)
         nonce_bytes = base64.b64decode(result.nonce_base64)
         ciphertext_bytes = base64.b64decode(result.ciphertext_base64)
@@ -41,7 +42,8 @@ class DemoTests(unittest.TestCase):
         self.assertEqual(result.aad, "")
         self.assertEqual(result.decrypted_plaintext, "")
         self.assertTrue(result.decrypted_matches)
-        self.assertFalse(result.modified_input_verified)
+        self.assertFalse(result.modified_nonce_verified)
+        self.assertFalse(result.modified_aad_verified)
 
     def test_rsa_pss_demo_verifies_original_message_and_rejects_tampered_message(self) -> None:
         result = run_rsa_pss_demo("unit test message")
