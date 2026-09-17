@@ -52,15 +52,19 @@ class DemoTests(unittest.TestCase):
 
     def test_parse_args_preserves_explicit_empty_strings_for_supported_demos(self) -> None:
         ecdsa_args = parse_args(["--demo", "ecdsa", "--message", ""])
-        hmac_args = parse_args(["--demo", "hmac", "--message", "", "--key", ""])
+        hmac_args = parse_args(["--demo", "hmac", "--message", "", "--key", "unit test secret"])
 
         self.assertEqual(ecdsa_args.message, "")
         self.assertEqual(hmac_args.message, "")
-        self.assertEqual(hmac_args.key, "")
+        self.assertEqual(hmac_args.key, "unit test secret")
 
     def test_parse_args_requires_key_for_hmac_demo(self) -> None:
         with self.assertRaises(SystemExit):
             parse_args(["--demo", "hmac"])
+
+    def test_parse_args_rejects_empty_key_for_hmac_demo(self) -> None:
+        with self.assertRaises(SystemExit):
+            parse_args(["--demo", "hmac", "--key", ""])
 
 
 if __name__ == "__main__":
