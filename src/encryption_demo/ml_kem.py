@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import base64
-import logging
 from dataclasses import dataclass
 
 from cryptography.hazmat.primitives.asymmetric import mlkem
 
+from .logging_utils import get_actor_logger
 
-LOGGER = logging.getLogger("encryption_demo")
+LOGGER = get_actor_logger("ML-KEM")
 
 
 @dataclass(frozen=True)
@@ -32,7 +32,7 @@ def run_ml_kem_demo() -> MlKemDemoResult:
     private_key_base64 = base64.b64encode(private_key.private_bytes_raw()).decode("ascii")
     public_key_base64 = base64.b64encode(public_key.public_bytes_raw()).decode("ascii")
     LOGGER.info("Generated ML-KEM-768 key pair.")
-    print(f"ML-KEM private key (raw, base64): {private_key_base64}")
+    LOGGER.info("Private key (raw, base64): %s", private_key_base64)
     LOGGER.info("Public key (raw, base64): %s", public_key_base64)
 
     encapsulated_shared_secret, ciphertext = public_key.encapsulate()

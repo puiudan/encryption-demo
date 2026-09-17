@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import hashlib
-import logging
 from dataclasses import dataclass
 
+from .logging_utils import get_actor_logger
 
-LOGGER = logging.getLogger("encryption_demo")
+LOGGER = get_actor_logger("SHA-256")
 
 
 @dataclass(frozen=True)
