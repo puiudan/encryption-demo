@@ -20,16 +20,14 @@ def get_actor_logger(actor: str) -> ActorLoggerAdapter:
 
 
 def configure_actor_logging(level: int = logging.INFO) -> None:
-    old_record_factory = logging.getLogRecordFactory()
-
-    def record_factory(*args: object, **kwargs: object) -> logging.LogRecord:
-        record = old_record_factory(*args, **kwargs)
-        if not hasattr(record, "actor"):
-            record.actor = DEFAULT_ACTOR
-        return record
-
-    logging.setLogRecordFactory(record_factory)
-    logging.basicConfig(
-        level=level,
-        format="%(actor)s | %(asctime)s | %(levelname)s | %(message)s",
+    root_logger = logging.getLogger()
+    handler = logging.StreamHandler()
+    handler.setFormatter(
+        logging.Formatter(
+            "%(actor)s | %(asctime)s | %(levelname)s | %(message)s",
+            defaults={"actor": DEFAULT_ACTOR},
+        )
     )
+    root_logger.handlers.clear()
+    root_logger.addHandler(handler)
+    root_logger.setLevel(level)
