@@ -16,7 +16,7 @@ LOGGER = logging.getLogger("encryption_demo")
 class AesGcmDemoResult:
     plaintext: str
     aad: str
-    key_base64: str
+    key_size_bits: int
     nonce_base64: str
     ciphertext_base64: str
     decrypted_plaintext: str
@@ -27,13 +27,12 @@ class AesGcmDemoResult:
 
 def run_aes_gcm_demo(plaintext: str, aad: str) -> AesGcmDemoResult:
     LOGGER.info("Starting AES-GCM demo.")
-    LOGGER.info("Input plaintext (UTF-8 text): %s", plaintext)
-    LOGGER.info("Input AAD (UTF-8 text): %s", aad)
+    LOGGER.info("Input plaintext length (bytes): %d", len(plaintext.encode("utf-8")))
+    LOGGER.info("Input AAD length (bytes): %d", len(aad.encode("utf-8")))
 
     key = AESGCM.generate_key(bit_length=256)
     nonce = os.urandom(12)
     aesgcm = AESGCM(key)
-    key_base64 = base64.b64encode(key).decode("ascii")
     nonce_base64 = base64.b64encode(nonce).decode("ascii")
     LOGGER.info("Generated AES key length (bits): %d", len(key) * 8)
     LOGGER.info("Generated nonce (base64): %s", nonce_base64)
@@ -48,7 +47,7 @@ def run_aes_gcm_demo(plaintext: str, aad: str) -> AesGcmDemoResult:
     decrypted = aesgcm.decrypt(nonce, ciphertext, aad_bytes)
     decrypted_plaintext = decrypted.decode("utf-8")
     decrypted_matches = decrypted_plaintext == plaintext
-    LOGGER.info("Decrypted plaintext (UTF-8 text): %s", decrypted_plaintext)
+    LOGGER.info("Decrypted plaintext length (bytes): %d", len(decrypted))
     LOGGER.info("Decryption with correct inputs succeeded: %s", decrypted_matches)
 
     tampered_nonce = bytearray(nonce)
@@ -72,7 +71,7 @@ def run_aes_gcm_demo(plaintext: str, aad: str) -> AesGcmDemoResult:
     return AesGcmDemoResult(
         plaintext=plaintext,
         aad=aad,
-        key_base64=key_base64,
+        key_size_bits=len(key) * 8,
         nonce_base64=nonce_base64,
         ciphertext_base64=ciphertext_base64,
         decrypted_plaintext=decrypted_plaintext,

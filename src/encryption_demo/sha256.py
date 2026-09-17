@@ -19,7 +19,6 @@ class Sha256DemoResult:
 
 def run_sha256_demo(message: str) -> Sha256DemoResult:
     LOGGER.info("Starting SHA-256 demo.")
-    LOGGER.info("Input message (UTF-8 text): %s", message)
 
     message_bytes = message.encode("utf-8")
     message_hex = message_bytes.hex()
@@ -30,7 +29,7 @@ def run_sha256_demo(message: str) -> Sha256DemoResult:
 
     tampered_message = f"{message} (tampered)"
     tampered_bytes = tampered_message.encode("utf-8")
-    LOGGER.info("Tampered input message (UTF-8 text): %s", tampered_message)
+    LOGGER.info("Created a tampered input variant for comparison.")
     tampered_digest_hex = hashlib.sha256(tampered_bytes).hexdigest()
     digests_match = digest_hex == tampered_digest_hex
     LOGGER.info("Tampered SHA-256 digest (hex): %s", tampered_digest_hex)
