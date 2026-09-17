@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 jobs:
-  run-ecdsa-demo:
+  run-sha256-demo:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -24,16 +24,17 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -e .
 
-      - name: Run ECDSA demo and capture logs
+      - name: Run SHA-256 demo and capture logs
         run: |
-          python -m encryption_demo --message "Hello from GitHub Actions" 2>&1 | tee ecdsa-demo.log
+          python -m encryption_demo --demo sha256 --message "Hello from GitHub Actions" 2>&1 | tee sha256-demo.log
 
-      - name: Upload ECDSA demo logs
+      - name: Upload SHA-256 demo logs
         uses: actions/upload-artifact@v4
         with:
-          name: ecdsa-demo-log
-          path: ecdsa-demo.log
-  run-ecdhe-demo:
+          name: sha256-demo-log
+          path: sha256-demo.log
+
+  run-aes-gcm-demo:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -49,16 +50,17 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -e .
 
-      - name: Run ECDHE demo and capture logs
+      - name: Run AES-GCM demo and capture logs
         run: |
-          python -m encryption_demo --demo ecdhe 2>&1 | tee ecdhe-demo.log
+          python -m encryption_demo --demo aes-gcm --message "Hello from GitHub Actions" --aad "github-actions-aad" 2>&1 | tee aes-gcm-demo.log
 
-      - name: Upload ECDHE demo logs
+      - name: Upload AES-GCM demo logs
         uses: actions/upload-artifact@v4
         with:
-          name: ecdhe-demo-log
-          path: ecdhe-demo.log
-  run-hmac-demo:
+          name: aes-gcm-demo-log
+          path: aes-gcm-demo.log
+
+  run-rsa-pss-demo:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -74,12 +76,12 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -e .
 
-      - name: Run HMAC-SHA256 demo and capture logs
+      - name: Run RSA-PSS demo and capture logs
         run: |
-          python -m encryption_demo --demo hmac --message "Hello from GitHub Actions" --key "GitHub Actions shared secret" 2>&1 | tee hmac-demo.log
+          python -m encryption_demo --demo rsa-pss --message "Hello from GitHub Actions" 2>&1 | tee rsa-pss-demo.log
 
-      - name: Upload HMAC-SHA256 demo logs
+      - name: Upload RSA-PSS demo logs
         uses: actions/upload-artifact@v4
         with:
-          name: hmac-demo-log
-          path: hmac-demo.log
+          name: rsa-pss-demo-log
+          path: rsa-pss-demo.log
