@@ -8,14 +8,14 @@ ECDSA is a **digital signature** algorithm, not an encryption algorithm. ECDHE i
 
 ## Project contents
 
-- `/home/runner/work/encryption-demo/encryption-demo/src/encryption_demo/ecdsa.py` - ECDSA signing demo implementation
-- `/home/runner/work/encryption-demo/encryption-demo/src/encryption_demo/ecdhe.py` - ECDHE key exchange demo implementation
-- `/home/runner/work/encryption-demo/encryption-demo/src/encryption_demo/hmac_sha256.py` - HMAC-SHA256 authentication demo implementation
-- `/home/runner/work/encryption-demo/encryption-demo/src/encryption_demo/demo.py` - CLI entrypoint that selects which demo to run
-- `/home/runner/work/encryption-demo/encryption-demo/src/encryption_demo/__main__.py` - package entrypoint for module execution
-- `/home/runner/work/encryption-demo/encryption-demo/tests/test_demo.py` - basic test coverage
-- `/home/runner/work/encryption-demo/encryption-demo/.devcontainer/devcontainer.json` - dev container setup
-- `/home/runner/work/encryption-demo/encryption-demo/.github/workflows/run-demo.yml` - GitHub Actions workflow that runs the demo and stores the log file
+- `src/encryption_demo/ecdsa.py` - ECDSA signing demo implementation
+- `src/encryption_demo/ecdhe.py` - ECDHE key exchange demo implementation
+- `src/encryption_demo/hmac_sha256.py` - HMAC-SHA256 authentication demo implementation
+- `src/encryption_demo/demo.py` - CLI entrypoint that selects which demo to run
+- `src/encryption_demo/__main__.py` - package entrypoint for module execution
+- `tests/test_demo.py` - basic test coverage
+- `.devcontainer/devcontainer.json` - dev container setup
+- `.github/workflows/run-demo.yml` - GitHub Actions workflow that runs the demo and stores the log file
 
 ## Run locally
 
@@ -59,7 +59,7 @@ pip install -e .
 
 ## GitHub Actions logs
 
-The workflow at `/home/runner/work/encryption-demo/encryption-demo/.github/workflows/run-demo.yml` runs all three demos on every push and on manual dispatch.
+The workflow at `.github/workflows/run-demo.yml` runs all three demos on every push and on manual dispatch.
 
 To inspect logs for learning:
 
