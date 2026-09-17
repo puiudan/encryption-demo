@@ -37,9 +37,18 @@ class DemoTests(unittest.TestCase):
         self.assertTrue(result.tag_hex)
         self.assertTrue(result.tag_base64)
 
-    def test_parse_args_rejects_key_for_non_hmac_demo(self) -> None:
-        with self.assertRaises(SystemExit):
-            parse_args(["--demo", "ecdsa", "--key", "unit test secret"])
+    def test_parse_args_rejects_invalid_demo_specific_arguments(self) -> None:
+        invalid_argv_sets = [
+            ["--demo", "ecdsa", "--key", "unit test secret"],
+            ["--key", "unit test secret", "--demo", "ecdsa"],
+            ["--demo", "ecdhe", "--message", "unit test message"],
+            ["--message", "unit test message", "--demo", "ecdhe"],
+        ]
+
+        for argv in invalid_argv_sets:
+            with self.subTest(argv=argv):
+                with self.assertRaises(SystemExit):
+                    parse_args(argv)
 
 
 if __name__ == "__main__":

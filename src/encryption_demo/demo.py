@@ -30,26 +30,35 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default="ecdsa",
         help="Demo type to run.",
     )
-    known_args, _ = parser.parse_known_args(argv)
+    parser.add_argument(
+        "--message",
+        default=None,
+        help="Message to use during the selected demo.",
+    )
+    parser.add_argument(
+        "--key",
+        default=None,
+        help="Secret key to use during the HMAC-SHA256 demo.",
+    )
 
-    if known_args.demo in {"ecdsa", "hmac"}:
-        parser.add_argument(
-            "--message",
-            default=(
-                "Hello from the ECDSA demo!"
-                if known_args.demo == "ecdsa"
-                else "Hello from the HMAC-SHA256 demo!"
-            ),
-            help="Message to use during the selected demo.",
-        )
-    if known_args.demo == "hmac":
-        parser.add_argument(
-            "--key",
-            default="demo secret key",
-            help="Secret key to use during the HMAC-SHA256 demo.",
-        )
+    args = parser.parse_args(argv)
+    if args.demo == "ecdhe":
+        if args.message is not None:
+            parser.error("--message is only supported with --demo ecdsa or --demo hmac")
+        if args.key is not None:
+            parser.error("--key is only supported with --demo hmac")
+        return args
 
-    return parser.parse_args(argv)
+    if args.key is not None and args.demo != "hmac":
+        parser.error("--key is only supported with --demo hmac")
+
+    if args.demo == "ecdsa":
+        args.message = args.message or "Hello from the ECDSA demo!"
+        return args
+
+    args.message = args.message or "Hello from the HMAC-SHA256 demo!"
+    args.key = args.key or "demo secret key"
+    return args
 
 
 def main() -> int:
