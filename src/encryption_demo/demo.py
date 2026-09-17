@@ -53,11 +53,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         parser.error("--key is only supported with --demo hmac")
 
     if args.demo == "ecdsa":
-        args.message = args.message or "Hello from the ECDSA demo!"
+        if args.message is None:
+            args.message = "Hello from the ECDSA demo!"
         return args
 
-    args.message = args.message or "Hello from the HMAC-SHA256 demo!"
-    args.key = args.key or "demo secret key"
+    if args.message is None:
+        args.message = "Hello from the HMAC-SHA256 demo!"
+    if args.key is None:
+        args.key = "demo secret key"
     return args
 
 

@@ -50,6 +50,14 @@ class DemoTests(unittest.TestCase):
                 with self.assertRaises(SystemExit):
                     parse_args(argv)
 
+    def test_parse_args_preserves_explicit_empty_strings_for_supported_demos(self) -> None:
+        ecdsa_args = parse_args(["--demo", "ecdsa", "--message", ""])
+        hmac_args = parse_args(["--demo", "hmac", "--message", "", "--key", ""])
+
+        self.assertEqual(ecdsa_args.message, "")
+        self.assertEqual(hmac_args.message, "")
+        self.assertEqual(hmac_args.key, "")
+
 
 if __name__ == "__main__":
     unittest.main()
