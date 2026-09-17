@@ -58,6 +58,10 @@ class DemoTests(unittest.TestCase):
         self.assertEqual(hmac_args.message, "")
         self.assertEqual(hmac_args.key, "")
 
+    def test_parse_args_requires_key_for_hmac_demo(self) -> None:
+        with self.assertRaises(SystemExit):
+            parse_args(["--demo", "hmac"])
+
 
 if __name__ == "__main__":
     unittest.main()
