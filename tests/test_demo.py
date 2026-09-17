@@ -5,6 +5,8 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 
 from encryption_demo.aes_gcm import run_aes_gcm_demo
 from encryption_demo.demo import parse_args
+from encryption_demo.ml_dsa import run_ml_dsa_demo
+from encryption_demo.ml_kem import run_ml_kem_demo
 from encryption_demo.rsa_pss import run_rsa_pss_demo, verify_signature
 from encryption_demo.sha256 import run_sha256_demo
 
@@ -50,8 +52,29 @@ class DemoTests(unittest.TestCase):
         self.assertTrue(result.verified)
         self.assertFalse(result.tampered_verified)
         self.assertEqual(result.message, "unit test message")
+        self.assertIn("BEGIN PRIVATE KEY", result.private_key_pem)
         self.assertIn("BEGIN PUBLIC KEY", result.public_key_pem)
         self.assertTrue(result.signature_base64)
+
+    def test_ml_kem_demo_decapsulates_original_and_changes_for_tampered_ciphertext(self) -> None:
+        result = run_ml_kem_demo()
+
+        self.assertTrue(result.private_key_base64)
+        self.assertTrue(result.public_key_base64)
+        self.assertTrue(result.ciphertext_base64)
+        self.assertTrue(result.shared_secret_matches)
+        self.assertFalse(result.tampered_shared_secret_matches)
+        self.assertIsInstance(result.tampered_decapsulation_succeeded, bool)
+
+    def test_ml_dsa_demo_verifies_original_message_and_rejects_tampered_message(self) -> None:
+        result = run_ml_dsa_demo("unit test message")
+
+        self.assertEqual(result.message, "unit test message")
+        self.assertTrue(result.private_key_base64)
+        self.assertTrue(result.public_key_base64)
+        self.assertTrue(result.signature_base64)
+        self.assertTrue(result.verified)
+        self.assertFalse(result.tampered_verified)
 
     def test_rsa_pss_verify_signature_rejects_malformed_signature(self) -> None:
         private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
@@ -63,6 +86,7 @@ class DemoTests(unittest.TestCase):
         invalid_argv_sets = [
             ["--demo", "sha256", "--aad", "unit test aad"],
             ["--aad", "unit test aad", "--demo", "rsa-pss"],
+            ["--demo", "ml-kem", "--message", "not supported"],
         ]
 
         for argv in invalid_argv_sets:
@@ -73,10 +97,12 @@ class DemoTests(unittest.TestCase):
     def test_parse_args_preserves_explicit_empty_strings_for_supported_demos(self) -> None:
         sha256_args = parse_args(["--demo", "sha256", "--message", ""])
         aes_gcm_args = parse_args(["--demo", "aes-gcm", "--message", "", "--aad", ""])
+        ml_dsa_args = parse_args(["--demo", "ml-dsa", "--message", ""])
 
         self.assertEqual(sha256_args.message, "")
         self.assertEqual(aes_gcm_args.message, "")
         self.assertEqual(aes_gcm_args.aad, "")
+        self.assertEqual(ml_dsa_args.message, "")
 
 
 if __name__ == "__main__":

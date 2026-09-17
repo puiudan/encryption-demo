@@ -1,10 +1,10 @@
 # cryptography-demos
 
-A small Python demo that teaches the basics of SHA-256, AES-GCM, RSA-PSS, ECDSA, ECDHE, and HMAC-SHA256 with verbose, step-by-step logs.
+A small Python demo that teaches the basics of SHA-256, AES-GCM, RSA-PSS, ECDSA, ECDHE, HMAC-SHA256, ML-KEM, and ML-DSA with verbose, step-by-step logs.
 
 ## Important note
 
-SHA-256 is a **hash** function. AES-GCM is an **authenticated encryption** mode. RSA-PSS is a **digital signature** scheme. This project demonstrates each concept in separate demos.
+SHA-256 is a **hash** function. AES-GCM is an **authenticated encryption** mode. RSA-PSS, ECDSA, and ML-DSA are **digital signature** schemes. ECDHE and ML-KEM are **key exchange / key encapsulation** mechanisms. This project demonstrates each concept in separate demos.
 
 ## Project contents
 
@@ -14,6 +14,8 @@ SHA-256 is a **hash** function. AES-GCM is an **authenticated encryption** mode.
 - `src/encryption_demo/ecdsa.py` - ECDSA signing demo implementation
 - `src/encryption_demo/ecdhe.py` - ECDHE key-exchange demo implementation
 - `src/encryption_demo/hmac_sha256.py` - HMAC-SHA256 message authentication demo implementation
+- `src/encryption_demo/ml_kem.py` - ML-KEM post-quantum key encapsulation demo implementation
+- `src/encryption_demo/ml_dsa.py` - ML-DSA post-quantum signature demo implementation
 - `src/encryption_demo/demo.py` - CLI entrypoint that selects which demo to run
 - `src/encryption_demo/__main__.py` - package entrypoint for module execution
 - `tests/test_demo.py` - basic test coverage
@@ -46,6 +48,18 @@ Run the RSA-PSS demo:
 python -m encryption_demo --demo rsa-pss --message "Learning RSA-PSS"
 ```
 
+Run the ML-KEM demo:
+
+```bash
+python -m encryption_demo --demo ml-kem
+```
+
+Run the ML-DSA demo:
+
+```bash
+python -m encryption_demo --demo ml-dsa --message "Learning ML-DSA"
+```
+
 ## Run tests
 
 ```bash
@@ -68,5 +82,5 @@ To inspect logs for learning:
 
 1. Open the **Actions** tab in GitHub.
 2. Select the **Run Crypto Demos** workflow run.
-3. Open the demo step you want to inspect (SHA-256, AES-GCM, RSA-PSS, ECDSA, ECDHE, or HMAC-SHA256) to read the live console output.
-4. Download the corresponding artifact: **sha256-demo-log**, **aes-gcm-demo-log**, **rsa-pss-demo-log**, **ecdsa-demo-log**, **ecdhe-demo-log**, or **hmac-sha256-demo-log**.
+3. Open the demo step you want to inspect (SHA-256, AES-GCM, RSA-PSS, ECDSA, ECDHE, HMAC-SHA256, ML-KEM, or ML-DSA) to read the live console output.
+4. Download the corresponding artifact: **sha256-demo-log**, **aes-gcm-demo-log**, **rsa-pss-demo-log**, **ecdsa-demo-log**, **ecdhe-demo-log**, **hmac-sha256-demo-log**, **ml-kem-demo-log**, or **ml-dsa-demo-log**.

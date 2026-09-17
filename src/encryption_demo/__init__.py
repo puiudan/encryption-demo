@@ -1,1 +1,1 @@
-"""SHA-256, AES-GCM, and RSA-PSS demo package."""
+"""Cryptography demo package for classical and post-quantum algorithms."""

@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "cryptography-demos"
 version = "0.1.0"
-description = "A Python cryptography learning demo for ECDSA, ECDHE, and HMAC-SHA256."
+description = "A Python cryptography learning demo for classical and post-quantum algorithms."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
