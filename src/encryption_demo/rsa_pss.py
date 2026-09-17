@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding, rsa
+from cryptography.hazmat.primitives.asymmetric.rsa import RSAPublicKey
 
 
 LOGGER = logging.getLogger("encryption_demo")
@@ -21,7 +22,7 @@ class RsaPssDemoResult:
     tampered_verified: bool
 
 
-def verify_signature(public_key: rsa.RSAPublicKey, message: bytes, signature: bytes) -> bool:
+def verify_signature(public_key: RSAPublicKey, message: bytes, signature: bytes) -> bool:
     try:
         public_key.verify(
             signature,

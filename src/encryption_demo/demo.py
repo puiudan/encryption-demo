@@ -1,9 +1,9 @@
 import argparse
 import logging
 
-from .aes_gcm import AesGcmDemoResult, run_aes_gcm_demo
-from .rsa_pss import RsaPssDemoResult, run_rsa_pss_demo
-from .sha256 import Sha256DemoResult, run_sha256_demo
+from .aes_gcm import run_aes_gcm_demo
+from .rsa_pss import run_rsa_pss_demo
+from .sha256 import run_sha256_demo
 
 
 def configure_logging() -> None:
@@ -14,10 +14,6 @@ def configure_logging() -> None:
 
 
 LOGGER = logging.getLogger("encryption_demo")
-
-
-def run_demo(message: str) -> Sha256DemoResult:
-    return run_sha256_demo(message)
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -75,7 +71,7 @@ def main() -> int:
         result = run_rsa_pss_demo(args.message)
         return 0 if result.verified and not result.tampered_verified else 1
 
-    result = run_demo(args.message)
+    result = run_sha256_demo(args.message)
     return 0 if not result.digests_match else 1
 
 
