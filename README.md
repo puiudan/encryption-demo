@@ -35,12 +35,12 @@ Run the ECDHE key exchange demo:
 
 ```bash
 python -m encryption_demo --demo ecdhe
+```
 
 Run the HMAC-SHA256 demo:
 
 ```bash
 python -m encryption_demo --demo hmac --message "Learning HMAC" --key "shared secret"
-```
 ```
 
 ## Run tests
