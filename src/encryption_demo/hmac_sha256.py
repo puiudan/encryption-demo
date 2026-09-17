@@ -40,7 +40,7 @@ def run_hmac_sha256_demo(message: str, secret_key: str) -> HmacSha256DemoResult:
     secret_key_bytes = secret_key.encode("utf-8")
     message_hex = binascii.hexlify(message_bytes).decode("ascii")
     LOGGER.info("Prepared UTF-8 encoded input for HMAC processing.")
-    LOGGER.info("Secret key (UTF-8): %s", secret_key)
+    print(f"HMAC secret key (UTF-8): {secret_key}")
 
     tag = generate_hmac_tag(message_bytes, secret_key_bytes)
     tag_hex = tag.hex()

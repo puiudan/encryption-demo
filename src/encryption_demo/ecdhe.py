@@ -52,8 +52,8 @@ def run_ecdhe_demo() -> EcdheDemoResult:
         format=serialization.PublicFormat.SubjectPublicKeyInfo,
     ).decode("utf-8")
     LOGGER.info("Generated ephemeral P-256 key pairs for Alice and Bob.")
-    LOGGER.info("Alice private key:\n%s", alice_private_key_pem.strip())
-    LOGGER.info("Bob private key:\n%s", bob_private_key_pem.strip())
+    print(f"Alice private key (PEM):\n{alice_private_key_pem.strip()}")
+    print(f"Bob private key (PEM):\n{bob_private_key_pem.strip()}")
     LOGGER.info("Alice public key:\n%s", alice_public_key_pem.strip())
     LOGGER.info("Bob public key:\n%s", bob_public_key_pem.strip())
 

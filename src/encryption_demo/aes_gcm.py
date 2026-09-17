@@ -37,7 +37,7 @@ def run_aes_gcm_demo(plaintext: str, aad: str) -> AesGcmDemoResult:
     key_base64 = base64.b64encode(key).decode("ascii")
     nonce_base64 = base64.b64encode(nonce).decode("ascii")
     LOGGER.info("Generated AES key length (bits): %d", len(key) * 8)
-    LOGGER.info("Generated AES-256 key (base64): %s", key_base64)
+    print(f"AES-256 key (base64): {key_base64}")
     LOGGER.info("Generated nonce (base64): %s", nonce_base64)
 
     plaintext_bytes = plaintext.encode("utf-8")
