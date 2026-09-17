@@ -13,6 +13,8 @@ LOGGER = logging.getLogger("encryption_demo")
 
 @dataclass(frozen=True)
 class EcdheDemoResult:
+    alice_private_key_pem: str
+    bob_private_key_pem: str
     alice_public_key_pem: str
     bob_public_key_pem: str
     alice_shared_secret_hex: str
@@ -31,6 +33,16 @@ def run_ecdhe_demo() -> EcdheDemoResult:
     bob_private_key = ec.generate_private_key(ec.SECP256R1())
     alice_public_key = alice_private_key.public_key()
     bob_public_key = bob_private_key.public_key()
+    alice_private_key_pem = alice_private_key.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.NoEncryption(),
+    ).decode("utf-8")
+    bob_private_key_pem = bob_private_key.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.NoEncryption(),
+    ).decode("utf-8")
     alice_public_key_pem = alice_public_key.public_bytes(
         encoding=serialization.Encoding.PEM,
         format=serialization.PublicFormat.SubjectPublicKeyInfo,
@@ -40,6 +52,8 @@ def run_ecdhe_demo() -> EcdheDemoResult:
         format=serialization.PublicFormat.SubjectPublicKeyInfo,
     ).decode("utf-8")
     LOGGER.info("Generated ephemeral P-256 key pairs for Alice and Bob.")
+    LOGGER.info("Alice private key:\n%s", alice_private_key_pem.strip())
+    LOGGER.info("Bob private key:\n%s", bob_private_key_pem.strip())
     LOGGER.info("Alice public key:\n%s", alice_public_key_pem.strip())
     LOGGER.info("Bob public key:\n%s", bob_public_key_pem.strip())
 
@@ -74,6 +88,8 @@ def run_ecdhe_demo() -> EcdheDemoResult:
     LOGGER.info("ECDHE demo finished.")
 
     return EcdheDemoResult(
+        alice_private_key_pem=alice_private_key_pem,
+        bob_private_key_pem=bob_private_key_pem,
         alice_public_key_pem=alice_public_key_pem,
         bob_public_key_pem=bob_public_key_pem,
         alice_shared_secret_hex=alice_shared_secret_hex,

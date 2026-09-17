@@ -16,6 +16,7 @@ LOGGER = logging.getLogger("encryption_demo")
 @dataclass(frozen=True)
 class RsaPssDemoResult:
     message: str
+    private_key_pem: str
     public_key_pem: str
     signature_base64: str
     verified: bool
@@ -41,11 +42,17 @@ def run_rsa_pss_demo(message: str) -> RsaPssDemoResult:
 
     private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     public_key = private_key.public_key()
+    private_key_pem = private_key.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.NoEncryption(),
+    ).decode("utf-8")
     public_key_pem = public_key.public_bytes(
         encoding=serialization.Encoding.PEM,
         format=serialization.PublicFormat.SubjectPublicKeyInfo,
     ).decode("utf-8")
-    LOGGER.info("Generated RSA private key (not logged for safety) with size: %d bits", private_key.key_size)
+    LOGGER.info("Generated RSA private key with size: %d bits", private_key.key_size)
+    LOGGER.info("Private key (PEM):\n%s", private_key_pem.strip())
     LOGGER.info("Generated RSA public key (PEM):\n%s", public_key_pem.strip())
 
     message_bytes = message.encode("utf-8")
@@ -70,6 +77,7 @@ def run_rsa_pss_demo(message: str) -> RsaPssDemoResult:
 
     return RsaPssDemoResult(
         message=message,
+        private_key_pem=private_key_pem,
         public_key_pem=public_key_pem,
         signature_base64=signature_base64,
         verified=verified,

@@ -16,6 +16,7 @@ LOGGER = logging.getLogger("encryption_demo")
 class AesGcmDemoResult:
     plaintext: str
     aad: str
+    key_base64: str
     key_size_bits: int
     nonce_base64: str
     ciphertext_base64: str
@@ -33,8 +34,10 @@ def run_aes_gcm_demo(plaintext: str, aad: str) -> AesGcmDemoResult:
     key = AESGCM.generate_key(bit_length=256)
     nonce = os.urandom(12)
     aesgcm = AESGCM(key)
+    key_base64 = base64.b64encode(key).decode("ascii")
     nonce_base64 = base64.b64encode(nonce).decode("ascii")
     LOGGER.info("Generated AES key length (bits): %d", len(key) * 8)
+    LOGGER.info("Generated AES-256 key (base64): %s", key_base64)
     LOGGER.info("Generated nonce (base64): %s", nonce_base64)
 
     plaintext_bytes = plaintext.encode("utf-8")
@@ -71,6 +74,7 @@ def run_aes_gcm_demo(plaintext: str, aad: str) -> AesGcmDemoResult:
     return AesGcmDemoResult(
         plaintext=plaintext,
         aad=aad,
+        key_base64=key_base64,
         key_size_bits=len(key) * 8,
         nonce_base64=nonce_base64,
         ciphertext_base64=ciphertext_base64,

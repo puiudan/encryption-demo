@@ -2,6 +2,8 @@ import argparse
 import logging
 
 from .aes_gcm import run_aes_gcm_demo
+from .ml_dsa import run_ml_dsa_demo
+from .ml_kem import run_ml_kem_demo
 from .rsa_pss import run_rsa_pss_demo
 from .sha256 import run_sha256_demo
 
@@ -18,11 +20,11 @@ LOGGER = logging.getLogger("encryption_demo")
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run a verbose SHA-256, AES-GCM, or RSA-PSS cryptography demo.",
+        description="Run a verbose cryptography demo.",
     )
     parser.add_argument(
         "--demo",
-        choices=["sha256", "aes-gcm", "rsa-pss"],
+        choices=["sha256", "aes-gcm", "rsa-pss", "ml-kem", "ml-dsa"],
         default="sha256",
         help="Demo type to run.",
     )
@@ -58,6 +60,16 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
             args.message = "Hello from the RSA-PSS demo!"
         return args
 
+    if args.demo == "ml-kem":
+        if args.message is not None:
+            parser.error("--message is not supported with --demo ml-kem")
+        return args
+
+    if args.demo == "ml-dsa":
+        if args.message is None:
+            args.message = "Hello from the ML-DSA demo!"
+        return args
+
     parser.error("Unsupported demo type.")
 
 
@@ -69,6 +81,12 @@ def main() -> int:
         return 0 if result.decrypted_matches and not result.modified_nonce_verified and not result.modified_aad_verified else 1
     if args.demo == "rsa-pss":
         result = run_rsa_pss_demo(args.message)
+        return 0 if result.verified and not result.tampered_verified else 1
+    if args.demo == "ml-kem":
+        result = run_ml_kem_demo()
+        return 0 if result.shared_secret_matches and not result.tampered_shared_secret_matches else 1
+    if args.demo == "ml-dsa":
+        result = run_ml_dsa_demo(args.message)
         return 0 if result.verified and not result.tampered_verified else 1
 
     run_sha256_demo(args.message)
