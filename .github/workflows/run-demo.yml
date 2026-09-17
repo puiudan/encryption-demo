@@ -58,3 +58,28 @@ jobs:
         with:
           name: ecdhe-demo-log
           path: ecdhe-demo.log
+  run-hmac-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install project
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+
+      - name: Run HMAC-SHA256 demo and capture logs
+        run: |
+          python -m encryption_demo --demo hmac --message "Hello from GitHub Actions" --key "GitHub Actions shared secret" 2>&1 | tee hmac-demo.log
+
+      - name: Upload HMAC-SHA256 demo logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: hmac-demo-log
+          path: hmac-demo.log

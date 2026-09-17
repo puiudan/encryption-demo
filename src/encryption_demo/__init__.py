@@ -1,1 +1,1 @@
-"""ECDSA and ECDHE demo package."""
+"""ECDSA, ECDHE, and HMAC-SHA256 demo package."""

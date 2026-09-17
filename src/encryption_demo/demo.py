@@ -2,6 +2,7 @@ import argparse
 import logging
 from .ecdhe import EcdheDemoResult, run_ecdhe_demo
 from .ecdsa import EcdsaDemoResult, run_ecdsa_demo
+from .hmac_sha256 import HmacSha256DemoResult, run_hmac_sha256_demo
 
 
 def configure_logging() -> None:
@@ -20,18 +21,23 @@ def run_demo(message: str) -> EcdsaDemoResult:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Run a verbose ECDSA or ECDHE cryptography demo.",
+        description="Run a verbose ECDSA, ECDHE, or HMAC-SHA256 cryptography demo.",
     )
     parser.add_argument(
         "--demo",
-        choices=["ecdsa", "ecdhe"],
+        choices=["ecdsa", "ecdhe", "hmac"],
         default="ecdsa",
         help="Demo type to run.",
     )
     parser.add_argument(
         "--message",
         default="Hello from the ECDSA demo!",
-        help="Message to sign during the ECDSA demo.",
+        help="Message to use during the ECDSA or HMAC-SHA256 demo.",
+    )
+    parser.add_argument(
+        "--key",
+        default="demo secret key",
+        help="Secret key to use during the HMAC-SHA256 demo.",
     )
     return parser.parse_args()
 
@@ -42,6 +48,9 @@ def main() -> int:
     if args.demo == "ecdhe":
         result = run_ecdhe_demo()
         return 0 if result.shared_secret_matches and result.derived_key_matches else 1
+    if args.demo == "hmac":
+        result = run_hmac_sha256_demo(args.message, args.key)
+        return 0 if result.verified and not result.tampered_verified and not result.wrong_key_verified else 1
 
     result = run_demo(args.message)
     return 0 if result.verified and not result.tampered_verified else 1
