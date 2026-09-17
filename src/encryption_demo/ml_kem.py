@@ -32,7 +32,7 @@ def run_ml_kem_demo() -> MlKemDemoResult:
     private_key_base64 = base64.b64encode(private_key.private_bytes_raw()).decode("ascii")
     public_key_base64 = base64.b64encode(public_key.public_bytes_raw()).decode("ascii")
     LOGGER.info("Generated ML-KEM-768 key pair.")
-    LOGGER.info("Private key (raw, base64): %s", private_key_base64)
+    LOGGER.info("Generated private/public key bytes for demo result export.")
     LOGGER.info("Public key (raw, base64): %s", public_key_base64)
 
     encapsulated_shared_secret, ciphertext = public_key.encapsulate()

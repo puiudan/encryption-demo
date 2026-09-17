@@ -20,14 +20,21 @@ def get_actor_logger(actor: str) -> ActorLoggerAdapter:
 
 
 def configure_actor_logging(level: int = logging.INFO) -> None:
-    root_logger = logging.getLogger()
-    handler = logging.StreamHandler()
-    handler.setFormatter(
-        logging.Formatter(
-            "%(actor)s | %(asctime)s | %(levelname)s | %(message)s",
-            defaults={"actor": DEFAULT_ACTOR},
-        )
+    logger = logging.getLogger("encryption_demo")
+    formatter = logging.Formatter(
+        "%(actor)s | %(asctime)s | %(levelname)s | %(message)s",
+        defaults={"actor": DEFAULT_ACTOR},
     )
-    root_logger.handlers.clear()
-    root_logger.addHandler(handler)
-    root_logger.setLevel(level)
+
+    actor_handler = next(
+        (handler for handler in logger.handlers if getattr(handler, "_encryption_demo_actor_handler", False)),
+        None,
+    )
+    if actor_handler is None:
+        actor_handler = logging.StreamHandler()
+        actor_handler._encryption_demo_actor_handler = True  # type: ignore[attr-defined]
+        logger.addHandler(actor_handler)
+
+    actor_handler.setFormatter(formatter)
+    logger.setLevel(level)
+    logger.propagate = False

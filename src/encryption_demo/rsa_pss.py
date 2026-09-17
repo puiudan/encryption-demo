@@ -52,8 +52,8 @@ def run_rsa_pss_demo(message: str) -> RsaPssDemoResult:
         format=serialization.PublicFormat.SubjectPublicKeyInfo,
     ).decode("utf-8")
     LOGGER.info("Generated RSA private key with size: %d bits", private_key.key_size)
-    LOGGER.info("Generated RSA private key (PEM):\n%s", private_key_pem.strip())
-    LOGGER.info("Generated RSA public key (PEM):\n%s", public_key_pem.strip())
+    LOGGER.info("Generated RSA private/public PEM material for demo result export.")
+    LOGGER.info("Generated RSA public key PEM length (chars): %d", len(public_key_pem.strip()))
 
     message_bytes = message.encode("utf-8")
     LOGGER.info("Input message length (bytes): %d", len(message_bytes))

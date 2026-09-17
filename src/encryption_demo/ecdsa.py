@@ -57,8 +57,8 @@ def run_ecdsa_demo(message: str) -> EcdsaDemoResult:
         format=serialization.PublicFormat.SubjectPublicKeyInfo,
     ).decode("utf-8")
     LOGGER.info("Generated a P-256 key pair.")
-    LOGGER.info("Private key (PEM):\n%s", private_key_pem.strip())
-    LOGGER.info("Public key:\n%s", public_key_pem.strip())
+    LOGGER.info("Generated private/public PEM material for demo result export.")
+    LOGGER.info("Public key PEM length (chars): %d", len(public_key_pem.strip()))
     private_numbers = private_key.private_numbers()
     public_numbers = private_numbers.public_numbers
     LOGGER.info("Private scalar d (hex): %064x", private_numbers.private_value)
