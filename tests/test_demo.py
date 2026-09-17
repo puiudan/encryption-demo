@@ -28,6 +28,15 @@ class DemoTests(unittest.TestCase):
         self.assertTrue(result.nonce_base64)
         self.assertTrue(result.ciphertext_base64)
 
+    def test_aes_gcm_demo_with_empty_inputs_still_rejects_tampering(self) -> None:
+        result = run_aes_gcm_demo("", "")
+
+        self.assertEqual(result.plaintext, "")
+        self.assertEqual(result.aad, "")
+        self.assertEqual(result.decrypted_plaintext, "")
+        self.assertTrue(result.decrypted_matches)
+        self.assertFalse(result.tampered_verified)
+
     def test_rsa_pss_demo_verifies_original_message_and_rejects_tampered_message(self) -> None:
         result = run_rsa_pss_demo("unit test message")
 

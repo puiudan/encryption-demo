@@ -43,9 +43,15 @@ def run_aes_gcm_demo(plaintext: str, aad: str) -> AesGcmDemoResult:
     LOGGER.info("Decryption with correct inputs succeeded: %s", decrypted_matches)
 
     tampered_ciphertext = bytearray(ciphertext)
-    tampered_ciphertext[-1] ^= 0x01
+    tampered_nonce = nonce
+    if tampered_ciphertext:
+        tampered_ciphertext[-1] ^= 0x01
+    else:
+        tampered_nonce = bytearray(nonce)
+        tampered_nonce[-1] ^= 0x01
+        tampered_nonce = bytes(tampered_nonce)
     try:
-        aesgcm.decrypt(nonce, bytes(tampered_ciphertext), aad_bytes)
+        aesgcm.decrypt(tampered_nonce, bytes(tampered_ciphertext), aad_bytes)
         tampered_verified = True
     except InvalidTag:
         tampered_verified = False
