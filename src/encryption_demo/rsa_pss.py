@@ -41,22 +41,34 @@ def run_rsa_pss_demo(message: str) -> RsaPssDemoResult:
 
     private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     public_key = private_key.public_key()
+    private_key_pem = private_key.private_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PrivateFormat.PKCS8,
+        encryption_algorithm=serialization.NoEncryption(),
+    ).decode("utf-8")
     public_key_pem = public_key.public_bytes(
         encoding=serialization.Encoding.PEM,
         format=serialization.PublicFormat.SubjectPublicKeyInfo,
     ).decode("utf-8")
+    LOGGER.info("Generated RSA private key (PEM):\n%s", private_key_pem.strip())
+    LOGGER.info("Generated RSA public key (PEM):\n%s", public_key_pem.strip())
 
     message_bytes = message.encode("utf-8")
+    LOGGER.info("Input message (UTF-8 text): %s", message)
+    LOGGER.info("Input message bytes (hex): %s", message_bytes.hex())
     signature = private_key.sign(
         message_bytes,
         padding.PSS(mgf=padding.MGF1(hashes.SHA256()), salt_length=padding.PSS.MAX_LENGTH),
         hashes.SHA256(),
     )
     signature_base64 = base64.b64encode(signature).decode("ascii")
+    LOGGER.info("Generated RSA-PSS signature (hex): %s", signature.hex())
+    LOGGER.info("Generated RSA-PSS signature (base64): %s", signature_base64)
     LOGGER.info("Generated RSA key pair and RSA-PSS signature.")
 
     verified = verify_signature(public_key, message_bytes, signature)
     tampered_message = f"{message} (tampered)".encode("utf-8")
+    LOGGER.info("Tampered input message (UTF-8 text): %s", tampered_message.decode("utf-8"))
     tampered_verified = verify_signature(public_key, tampered_message, signature)
     LOGGER.info("Verification with original message: %s", verified)
     LOGGER.info("Verification with tampered message: %s", tampered_verified)
