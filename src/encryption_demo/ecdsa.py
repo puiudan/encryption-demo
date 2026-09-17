@@ -61,7 +61,6 @@ def run_ecdsa_demo(message: str) -> EcdsaDemoResult:
     LOGGER.info("Public key (PEM, escaped newlines): %s", public_key_pem.strip().replace("\n", "\\n"))
     private_numbers = private_key.private_numbers()
     public_numbers = private_numbers.public_numbers
-    LOGGER.info("Private scalar d (hex): %064x", private_numbers.private_value)
     LOGGER.info("Public point X (hex): %064x", public_numbers.x)
     LOGGER.info("Public point Y (hex): %064x", public_numbers.y)
 
