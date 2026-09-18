@@ -1,15 +1,15 @@
 from __future__ import annotations
 
 import base64
-import logging
 import os
 from dataclasses import dataclass
 
 from cryptography.exceptions import InvalidTag
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
+from .logging_utils import get_actor_logger
 
-LOGGER = logging.getLogger("encryption_demo")
+LOGGER = get_actor_logger("AES-GCM")
 
 
 @dataclass(frozen=True)

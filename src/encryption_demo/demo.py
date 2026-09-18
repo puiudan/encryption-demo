@@ -1,21 +1,11 @@
 import argparse
-import logging
 
 from .aes_gcm import run_aes_gcm_demo
+from .logging_utils import configure_actor_logging
 from .ml_dsa import run_ml_dsa_demo
 from .ml_kem import run_ml_kem_demo
 from .rsa_pss import run_rsa_pss_demo
 from .sha256 import run_sha256_demo
-
-
-def configure_logging() -> None:
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s | %(levelname)s | %(message)s",
-    )
-
-
-LOGGER = logging.getLogger("encryption_demo")
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -74,7 +64,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def main() -> int:
-    configure_logging()
+    configure_actor_logging()
     args = parse_args()
     if args.demo == "aes-gcm":
         result = run_aes_gcm_demo(args.message, args.aad)

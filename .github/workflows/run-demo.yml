@@ -106,10 +106,10 @@ jobs:
       - name: Run ECDSA demo and capture logs
         run: |
           python - <<'PY' 2>&1 | tee ecdsa-demo.log
-          import logging
           from encryption_demo.ecdsa import run_ecdsa_demo
+          from encryption_demo.logging_utils import configure_actor_logging
 
-          logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
+          configure_actor_logging()
           result = run_ecdsa_demo("Hello from GitHub Actions")
           raise SystemExit(0 if result.verified and not result.tampered_verified else 1)
           PY
@@ -139,10 +139,10 @@ jobs:
       - name: Run ECDHE demo and capture logs
         run: |
           python - <<'PY' 2>&1 | tee ecdhe-demo.log
-          import logging
           from encryption_demo.ecdhe import run_ecdhe_demo
+          from encryption_demo.logging_utils import configure_actor_logging
 
-          logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
+          configure_actor_logging()
           result = run_ecdhe_demo()
           raise SystemExit(0 if result.shared_secret_matches and result.derived_key_matches else 1)
           PY
@@ -172,10 +172,10 @@ jobs:
       - name: Run HMAC-SHA256 demo and capture logs
         run: |
           python - <<'PY' 2>&1 | tee hmac-sha256-demo.log
-          import logging
           from encryption_demo.hmac_sha256 import run_hmac_sha256_demo
+          from encryption_demo.logging_utils import configure_actor_logging
 
-          logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
+          configure_actor_logging()
           result = run_hmac_sha256_demo("Hello from GitHub Actions", "github-actions-secret-key")
           raise SystemExit(0 if result.verified and not result.tampered_verified and not result.wrong_key_verified else 1)
           PY

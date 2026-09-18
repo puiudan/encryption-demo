@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import base64
 import binascii
-import logging
 from dataclasses import dataclass
 
 from cryptography.exceptions import InvalidSignature
@@ -10,8 +9,9 @@ from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives.asymmetric.utils import decode_dss_signature
 
+from .logging_utils import get_actor_logger
 
-LOGGER = logging.getLogger("encryption_demo")
+LOGGER = get_actor_logger("ECDSA")
 
 
 @dataclass(frozen=True)
@@ -57,11 +57,10 @@ def run_ecdsa_demo(message: str) -> EcdsaDemoResult:
         format=serialization.PublicFormat.SubjectPublicKeyInfo,
     ).decode("utf-8")
     LOGGER.info("Generated a P-256 key pair.")
-    print(f"ECDSA private key (PEM):\n{private_key_pem.strip()}")
-    LOGGER.info("Public key:\n%s", public_key_pem.strip())
+    LOGGER.info("Generated private key material for demo result export.")
+    LOGGER.info("Public key (PEM, escaped newlines): %s", public_key_pem.strip().replace("\n", "\\n"))
     private_numbers = private_key.private_numbers()
     public_numbers = private_numbers.public_numbers
-    LOGGER.info("Private scalar d (hex): %064x", private_numbers.private_value)
     LOGGER.info("Public point X (hex): %064x", public_numbers.x)
     LOGGER.info("Public point Y (hex): %064x", public_numbers.y)
 

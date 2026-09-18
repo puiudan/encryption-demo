@@ -4,11 +4,11 @@ import base64
 import binascii
 import hashlib
 import hmac
-import logging
 from dataclasses import dataclass
 
+from .logging_utils import get_actor_logger
 
-LOGGER = logging.getLogger("encryption_demo")
+LOGGER = get_actor_logger("HMAC-SHA256")
 
 
 @dataclass(frozen=True)

@@ -2,14 +2,14 @@ from __future__ import annotations
 
 import base64
 import binascii
-import logging
 from dataclasses import dataclass
 
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives.asymmetric import mldsa
 
+from .logging_utils import get_actor_logger
 
-LOGGER = logging.getLogger("encryption_demo")
+LOGGER = get_actor_logger("ML-DSA")
 
 
 @dataclass(frozen=True)
@@ -40,7 +40,7 @@ def run_ml_dsa_demo(message: str) -> MlDsaDemoResult:
     private_key_base64 = base64.b64encode(private_key.private_bytes_raw()).decode("ascii")
     public_key_base64 = base64.b64encode(public_key.public_bytes_raw()).decode("ascii")
     LOGGER.info("Generated ML-DSA-65 key pair.")
-    print(f"ML-DSA private key (raw, base64): {private_key_base64}")
+    LOGGER.info("Generated private key bytes for demo result export.")
     LOGGER.info("Public key (raw, base64): %s", public_key_base64)
 
     message_bytes = message.encode("utf-8")

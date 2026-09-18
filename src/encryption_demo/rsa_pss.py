@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import base64
-import logging
 from dataclasses import dataclass
 
 from cryptography.exceptions import InvalidSignature
@@ -9,8 +8,9 @@ from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding, rsa
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPublicKey
 
+from .logging_utils import get_actor_logger
 
-LOGGER = logging.getLogger("encryption_demo")
+LOGGER = get_actor_logger("RSA-PSS")
 
 
 @dataclass(frozen=True)
@@ -52,8 +52,8 @@ def run_rsa_pss_demo(message: str) -> RsaPssDemoResult:
         format=serialization.PublicFormat.SubjectPublicKeyInfo,
     ).decode("utf-8")
     LOGGER.info("Generated RSA private key with size: %d bits", private_key.key_size)
-    print(f"RSA private key (PEM):\n{private_key_pem.strip()}")
-    LOGGER.info("Generated RSA public key (PEM):\n%s", public_key_pem.strip())
+    LOGGER.info("Generated RSA private key material for demo result export.")
+    LOGGER.info("Generated RSA public key (PEM, escaped newlines): %s", public_key_pem.strip().replace("\n", "\\n"))
 
     message_bytes = message.encode("utf-8")
     LOGGER.info("Input message length (bytes): %d", len(message_bytes))
